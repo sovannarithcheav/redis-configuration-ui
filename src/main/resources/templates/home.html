@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="~{layout}">
+<head>
+
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"/>
+
+    <title>Home</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.26.28/dist/sweetalert2.all.min.js"></script>
+    <!-- Optional: include a polyfill for ES6 Promises for IE11 and Android browser -->
+    <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="container" style="margin-top:50px">
+        <div class="row">
+            <h4>User Processing : </h4>
+            <div class="col-md-3">
+                <div id="sys_pre">
+                    <div class="form-group">
+                        <label for="user-account-id">User Account ID*:</label>
+                        <div>
+                            <input class="form-control" id="user-account-id">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="service-name">Processing Service Name:</label>
+                    <div>
+                        <input class="form-control" id="service-name" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="processing-status">Processing Status:</label>
+                    <div>
+                        <input class="form-control" id="processing-status" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="update-user-processing"> -- </label>
+                    <div>
+                        <button id="update-user-processing" type="button" class="btn btn-light">update</button>
+                        <span id="ok-sign-1" class="glyphicon glyphicon-ok-circle"
+                              style="color: lawngreen; display: none;"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<th:block layout:fragment="script">
+</th:block>
+</body>
+</html>

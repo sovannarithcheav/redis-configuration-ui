@@ -1,0 +1,375 @@
+    <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generator" content="Asciidoctor 1.5.4">
+  <meta name="author" content="Sovannarith">
+  <title>Sring Boot Redis Document</title>
+  <link rel="stylesheet" href="https://asciidoclive.com/assets/asciidoctor.js/css/asciidoctor.css">
+</head>
+
+<body class="article toc2 toc-left">
+  <div id="header">
+    <h1>Sring Boot Redis Document</h1>
+    <div class="details">
+      <span id="author" class="author">Sovannarith</span><br>
+      <span id="revnumber">version 1.0</span>
+    </div>
+    <div id="toc" class="toc2">
+      <div id="toctitle">Table of Contents</div>
+      <ul class="sectlevel1">
+        <li><a href="#_about_redis">1. About Redis</a></li>
+        <li><a href="#_redis_advantages">2. Redis Advantages</a>
+          <ul class="sectlevel2">
+            <li><a href="#_redis_allows_storing_key_and_value_pairs_as_large_as_512_mb">2.1. Redis allows storing key and value pairs as large as 512 MB.</a></li>
+            <li><a href="#_redis_uses_its_own_hashing_mechanism_called_redis_hashing">2.2. Redis uses its own hashing mechanism called Redis Hashing.</a></li>
+            <li><a href="#_redis_offers_data_replication">2.3. Redis offers data replication.</a></li>
+            <li><a href="#_the_redis_cache_can_withstand_failures_and_provide_uninterrupted_service">2.4. The Redis cache can withstand failures and provide uninterrupted service.</a></li>
+            <li><a href="#_redis_has_clients_in_all_the_popular_programming_languages">2.5. Redis has clients in all the popular programming languages.</a></li>
+            <li><a href="#_redis_offers_a_pub_sub_messaging_system">2.6. Redis offers a pub/sub messaging system.</a></li>
+            <li><a href="#_redis_allows_inserting_huge_amounts_of_data_into_its_cache_very_easily">2.7. Redis allows inserting huge amounts of data into its cache very easily.</a></li>
+            <li><a href="#_redis_can_be_installed_in_raspberry_pi_and_arm_devices">2.8. Redis can be installed in Raspberry Pi and ARM devices.</a></li>
+            <li><a href="#_redis_protocol_makes_it_simple_to_implement_a_client">2.9. Redis protocol makes it simple to implement a client.</a></li>
+            <li><a href="#_redis_support_transactions">2.10. Redis support transactions.</a></li>
+          </ul>
+        </li>
+        <li><a href="#_get_started_with_spring_data_redis">3. Get Started with Spring Data Redis</a>
+          <ul class="sectlevel2">
+            <li><a href="#_maven_dependencies">3.1. Maven Dependencies</a></li>
+            <li><a href="#_the_redis_configuration">3.2. The Redis Configuration</a>
+              <ul class="sectlevel3">
+                <li><a href="#_java_configuration">3.2.1. java Configuration</a></li>
+                <li><a href="#_custom_connection_properties">3.2.2. Custom Connection Properties</a></li>
+                <li><a href="#_redis_repository">3.2.3. Redis Repository</a></li>
+                <li><a href="#_the_spring_data_repository">3.2.4. The Spring Data Repository</a></li>
+                <li><a href="#_data_access_using_studentrepository">3.2.5. Data Access using StudentRepository</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div id="content">
+    <div class="sect1">
+      <h2 id="_about_redis"><a class="link" href="#_about_redis">1. About Redis</a></h2>
+      <div class="sectionbody">
+        <div class="paragraph">
+          <p>Redis is an open source (BSD licensed), in-memory data structure store,
+            used as a database, cache and message broker. It supports data structures
+            such as strings, hashes, lists, sets, sorted sets with range queries,
+            bitmaps, hyperloglogs and geospatial indexes with radius queries. Redis
+            has built-in replication, Lua scripting, LRU eviction, transactions and
+            different levels of on-disk persistence, and provides high availability
+            via Redis Sentinel and automatic partitioning with Redis Cluster.</p>
+        </div>
+      </div>
+    </div>
+    <div class="sect1">
+      <h2 id="_redis_advantages"><a class="link" href="#_redis_advantages">2. Redis Advantages</a></h2>
+      <div class="sectionbody">
+        <div class="sect2">
+          <h3 id="_redis_allows_storing_key_and_value_pairs_as_large_as_512_mb"><a class="link" href="#_redis_allows_storing_key_and_value_pairs_as_large_as_512_mb">2.1. Redis allows storing key and value pairs as large as 512 MB.</a></h3>
+          <div class="paragraph">
+            <p>You can have huge keys and values of objects as big as 512 MB, which
+              means that Redis will support up to 1GB of data for a single entry.</p>
+          </div>
+        </div>
+        <div class="sect2">
+          <h3 id="_redis_uses_its_own_hashing_mechanism_called_redis_hashing"><a class="link" href="#_redis_uses_its_own_hashing_mechanism_called_redis_hashing">2.2. Redis uses its own hashing mechanism called Redis Hashing.</a></h3>
+          <div class="paragraph">
+            <p>Redis stores data in the form of a key and a map, i.e. string fields
+              and string values. For example, the following code uses Redis hash
+              to save user details:</p>
+          </div>
+          <div class="listingblock">
+            <div class="content">
+              <pre class="highlight"><code class="language-java" data-lang="java"> Map&lt;String, String&gt; user = new HashMap&lt;&gt;();
+ user.put("username", "john123");
+ user.put("firstName", "John");
+ // use Jedis client
+ jedis.hmset("user:john123", user);</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect2">
+          <h3 id="_redis_offers_data_replication"><a class="link" href="#_redis_offers_data_replication">2.3. Redis offers data replication.</a></h3>
+          <div class="paragraph">
+            <p>Replication is the process of setting up master-slave cache nodes. The
+              slave nodes always listen to the master node, which means that when
+              the master node is updated, slaves will automatically be updated, as
+              well. Redis can also update slaves asynchronously.</p>
+          </div>
+        </div>
+        <div class="sect2">
+          <h3 id="_the_redis_cache_can_withstand_failures_and_provide_uninterrupted_service"><a class="link" href="#_the_redis_cache_can_withstand_failures_and_provide_uninterrupted_service">2.4. The Redis cache can withstand failures and provide uninterrupted service.</a></h3>
+          <div class="paragraph">
+            <p>Since Redis can be used to set up efficient replication, at any point
+              in time, the cache service will be up-and-running — even if any of
+              the slave nodes are down. However, the nodes are resilient and will
+              overcome the failure and continue providing service.</p>
+          </div>
+        </div>
+        <div class="sect2">
+          <h3 id="_redis_has_clients_in_all_the_popular_programming_languages"><a class="link" href="#_redis_has_clients_in_all_the_popular_programming_languages">2.5. Redis has clients in all the popular programming languages.</a></h3>
+          <div class="paragraph">
+            <p>Redis has client APIs developed in all the popular languages such as
+              C, Ruby, Java, JavaScript, and Python.</p>
+          </div>
+        </div>
+        <div class="sect2">
+          <h3 id="_redis_offers_a_pub_sub_messaging_system"><a class="link" href="#_redis_offers_a_pub_sub_messaging_system">2.6. Redis offers a pub/sub messaging system.</a></h3>
+          <div class="paragraph">
+            <p>You can develop a high-performing messaging application using the Redis
+              pub/sub mechanism using any language of your choice.</p>
+          </div>
+        </div>
+        <div class="sect2">
+          <h3 id="_redis_allows_inserting_huge_amounts_of_data_into_its_cache_very_easily"><a class="link" href="#_redis_allows_inserting_huge_amounts_of_data_into_its_cache_very_easily">2.7. Redis allows inserting huge amounts of data into its cache very easily.</a></h3>
+          <div class="paragraph">
+            <p>Sometimes, it is required to load millions of pieces of data into the
+              cache within a short period of time. This can be done easily using
+              mass insertion, a feature supported by Redis.</p>
+          </div>
+        </div>
+        <div class="sect2">
+          <h3 id="_redis_can_be_installed_in_raspberry_pi_and_arm_devices"><a class="link" href="#_redis_can_be_installed_in_raspberry_pi_and_arm_devices">2.8. Redis can be installed in Raspberry Pi and ARM devices.</a></h3>
+          <div class="paragraph">
+            <p>Redis has a small memory footprint and it can be installed in Raspberry
+              Pi to enable IoT-based applications.</p>
+          </div>
+        </div>
+        <div class="sect2">
+          <h3 id="_redis_protocol_makes_it_simple_to_implement_a_client"><a class="link" href="#_redis_protocol_makes_it_simple_to_implement_a_client">2.9. Redis protocol makes it simple to implement a client.</a></h3>
+          <div class="paragraph">
+            <p>A Redis client communicates with its server using RESP (Redis Serialization
+              Protocol). This protocol is simple to implement and is human-readable.</p>
+          </div>
+        </div>
+        <div class="sect2">
+          <h3 id="_redis_support_transactions"><a class="link" href="#_redis_support_transactions">2.10. Redis support transactions.</a></h3>
+          <div class="paragraph">
+            <p>Redis supports transactions, which means that commands can be executed
+              as a queue instead of executing one at a time. Typically, commands
+              after MULTI will be added to a queue and once EXEC is issued, all the
+              commands saved in the queue will be executed at once.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sect1">
+      <h2 id="_get_started_with_spring_data_redis"><a class="link" href="#_get_started_with_spring_data_redis">3. Get Started with Spring Data Redis</a></h2>
+      <div class="sectionbody">
+        <div class="sect2">
+          <h3 id="_maven_dependencies"><a class="link" href="#_maven_dependencies">3.1. Maven Dependencies</a></h3>
+          <div class="paragraph">
+            <p>Let’s start by declaring the Spring Data Redis dependencies in the pom.xml:</p>
+          </div>
+          <div class="listingblock">
+            <div class="content">
+              <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.data&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-data-redis&lt;/artifactId&gt;
+    &lt;version&gt;2.0.3.RELEASE&lt;/version&gt;
+ &lt;/dependency&gt;
+
+&lt;dependency&gt;
+    &lt;groupId&gt;redis.clients&lt;/groupId&gt;
+    &lt;artifactId&gt;jedis&lt;/artifactId&gt;
+    &lt;version&gt;2.9.0&lt;/version&gt;
+    &lt;type&gt;jar&lt;/type&gt;
+&lt;/dependency&gt;</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect2">
+          <h3 id="_the_redis_configuration"><a class="link" href="#_the_redis_configuration">3.2. The Redis Configuration</a></h3>
+          <div class="sect3">
+            <h4 id="_java_configuration"><a class="link" href="#_java_configuration">3.2.1. java Configuration</a></h4>
+            <div class="paragraph">
+              <p>Let’s start with the configuration bean definitions:</p>
+            </div>
+            <div class="listingblock">
+              <div class="content">
+                <pre class="highlight"><code class="language-java" data-lang="java">@Bean
+JedisConnectionFactory jedisConnectionFactory() {
+    return new JedisConnectionFactory();
+}
+
+@Bean
+public RedisTemplate&lt;String, Object&gt; redisTemplate() {
+    RedisTemplate&lt;String, Object&gt; template = new RedisTemplate&lt;&gt;();
+    template.setConnectionFactory(jedisConnectionFactory());
+    return template;
+}</code></pre>
+              </div>
+            </div>
+            <div class="paragraph">
+              <p>The configuration is quite simple. First, using the Jedis client, we’re
+                defining a connectionFactory.</p>
+            </div>
+            <div class="paragraph">
+              <p>Then, we defined a RedisTemplate using the jedisConnectionFactory.
+                This can be used for querying data with a custom repository.</p>
+            </div>
+          </div>
+          <div class="sect3">
+            <h4 id="_custom_connection_properties"><a class="link" href="#_custom_connection_properties">3.2.2. Custom Connection Properties</a></h4>
+            <div class="paragraph">
+              <p>You may have already noticed that the usual connection-related properties
+                are missing in the above configuration. For example, the server address
+                and port are missing in the configuration.The reason is simple: for
+                our example, we’re using the defaults.</p>
+            </div>
+            <div class="paragraph">
+              <p>However, if we need to configure the connection details, we can always
+                modify the jedisConnectionFactory configuration as follows:</p>
+            </div>
+            <div class="listingblock">
+              <div class="content">
+                <pre class="highlight"><code class="language-java" data-lang="java">@Bean
+JedisConnectionFactory jedisConnectionFactory() {
+    JedisConnectionFactory jedisConFactory
+      = new JedisConnectionFactory();
+    jedisConFactory.setHostName("localhost");
+    jedisConFactory.setPort(6379);
+    return jedisConFactory;
+}</code></pre>
+              </div>
+            </div>
+          </div>
+          <div class="sect3">
+            <h4 id="_redis_repository"><a class="link" href="#_redis_repository">3.2.3. Redis Repository</a></h4>
+            <div class="paragraph">
+              <p>Let’s use a Student entity for our examples:</p>
+            </div>
+            <div class="listingblock">
+              <div class="content">
+                <pre class="highlight"><code class="language-java" data-lang="java">@RedisHash("Student")
+public class Student implements Serializable {
+
+    public enum Gender {
+        MALE, FEMALE
+    }
+
+    private String id;
+    private String name;
+    private Gender gender;
+    private int grade;
+    // ...
+}</code></pre>
+              </div>
+            </div>
+          </div>
+          <div class="sect3">
+            <h4 id="_the_spring_data_repository"><a class="link" href="#_the_spring_data_repository">3.2.4. The Spring Data Repository</a></h4>
+            <div class="paragraph">
+              <p>Let’s now create the StudentRepository as follows:</p>
+            </div>
+            <div class="listingblock">
+              <div class="content">
+                <pre class="highlight"><code class="language-java" data-lang="java">@Repository
+public interface StudentRepository extends CrudRepository&lt;Student, String&gt; {}</code></pre>
+              </div>
+            </div>
+          </div>
+          <div class="sect3">
+            <h4 id="_data_access_using_studentrepository"><a class="link" href="#_data_access_using_studentrepository">3.2.5. Data Access using StudentRepository</a></h4>
+            <div class="paragraph">
+              <p>By extending CrudRepository in StudentRepository, we automatically
+                get a complete set of persistence methods that perform CRUD functionality.</p>
+            </div>
+            <div class="paragraph">
+              <p><strong>Saving a New Student Object</strong> Let’s save a new student
+                object in the data store:</p>
+            </div>
+            <div class="listingblock">
+              <div class="content">
+                <pre class="highlight"><code class="language-java" data-lang="java">Student student = new Student(
+  "Eng2015001", "John Doe", Student.Gender.MALE, 1);
+studentRepository.save(student);</code></pre>
+              </div>
+            </div>
+            <div class="paragraph">
+              <p><strong>Retrieving an Existing Student Object</strong></p>
+            </div>
+            <div class="paragraph">
+              <p>We can verify the correct insertion of the student in the previous
+                section by fetching the student data:</p>
+            </div>
+            <div class="listingblock">
+              <div class="content">
+                <pre class="highlight"><code class="language-java" data-lang="java">Student retrievedStudent =
+  studentRepository.findById("Eng2015001");</code></pre>
+              </div>
+            </div>
+            <div class="paragraph">
+              <p><strong>Updating an Existing Student Object</strong></p>
+            </div>
+            <div class="paragraph">
+              <p>Let’s change the name of the student retrieved above and save it again:</p>
+            </div>
+            <div class="listingblock">
+              <div class="content">
+                <pre class="highlight"><code class="language-java" data-lang="java">retrievedStudent.setName("Richard Watson");
+studentRepository.save(student);</code></pre>
+              </div>
+            </div>
+            <div class="paragraph">
+              <p><strong>Deleting an Existing Student Data</strong></p>
+            </div>
+            <div class="paragraph">
+              <p>We can delete the above-inserted student data:</p>
+            </div>
+            <div class="listingblock">
+              <div class="content">
+                <pre class="highlight"><code class="language-java" data-lang="java">studentRepository.deleteById(student.getId());</code></pre>
+              </div>
+            </div>
+            <div class="paragraph">
+              <p>Now we can search for the student object and verify that the result
+                is null.</p>
+            </div>
+            <div class="paragraph">
+              <p><strong>Find All Student Data</strong> We can insert a few student
+                objects:</p>
+            </div>
+            <div class="listingblock">
+              <div class="content">
+                <pre class="highlight"><code class="language-java" data-lang="java">Student engStudent = new Student(
+  "Eng2015001", "John Doe", Student.Gender.MALE, 1);
+Student medStudent = new Student(
+  "Med2015001", "Gareth Houston", Student.Gender.MALE, 2);
+studentRepository.save(engStudent);
+studentRepository.save(medStudent);</code></pre>
+              </div>
+            </div>
+            <div class="paragraph">
+              <p>We can also achieve this by inserting a collection. For that, there
+                is a different method – saveAll() – which accepts a single Iterable
+                object containing multiple student objects that we want to persist.</p>
+            </div>
+            <div class="paragraph">
+              <p>To find all inserted students, we can use the findAll() method:</p>
+            </div>
+            <div class="listingblock">
+              <div class="content">
+                <pre class="highlight"><code class="language-java" data-lang="java">List&lt;Student&gt; students = new ArrayList&lt;&gt;();
+studentRepository.findAll().forEach(students::add);</code></pre>
+              </div>
+            </div>
+            <div class="paragraph">
+              <p>Then we can quickly check the size of the students list or verify for
+                a greater granularity by checking the properties of each object.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

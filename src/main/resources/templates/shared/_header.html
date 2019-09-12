@@ -1,0 +1,18 @@
+<nav class="navbar navbar-inverse navbar-fixed-top" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">App Configuration</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li class="dropdown">
+                <a th:href="@{/system-message}" class="dropdown-toggle" data-toggle="dropdown" href="#">Configuration
+                    <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li id="li-p"><a th:href="@{/system-message}" id="sys_p">Phone Top Up</a></li>
+                    <li id="li-m"><a th:href="@{/system-message}" id="sys_m">System Messages</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>

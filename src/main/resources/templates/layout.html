@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta charset="UTF-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0"/>
+    <title layout:title-pattern="$DECORATOR_TITLE-$CONTENT_TITLE">Search</title>
+    <link rel="icon" href="icon/capitain.png" type="image/gif" sizes="16x16">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"></script>
+    <style layout:fragment="style"></style>
+    <style th:replace="shared/_style"></style>
+</head>
+
+<body class="sidebar_main_open">
+<div class="page-wrapper">
+    <div th:replace="shared/_header"></div>
+
+    <div layout:fragment="content">
+    </div>
+
+</div>
+
+<div th:replace="shared/_script"></div>
+<th:block layout:fragment="script"/>
+
+</body>
+
+</html>
