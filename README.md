@@ -1,2 +1,1 @@
-# ami-kh-api-core_redis-configuration
-
+# redis-configuration-ui
